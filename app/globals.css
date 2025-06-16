@@ -4,6 +4,12 @@
   --background: #ffffff;
   --foreground: #171717;
 }
+@font-face {
+  font-family: "dayaknes";
+  src: url("/assets/font/dayaknes.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -20,7 +26,73 @@
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+@font-face {
+  font-family: "dayaknes";
+  src: url("../public/fonts/dayaknes.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "katulistiwa";
+  src: url("../public/fonts/katulistiwa.ttf") format("truetype");
+}
+
+.text-katulistiwa {
+  font-family: "katulistiwa", sans-serif;
+}
+
+.text-dayaknes {
+  font-family: "dayaknes", sans-serif;
+}
+
+/* make a big blur shadow radial gradient for background */
+.province::before {
+  background-color: red;
+  position: absolute;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
+}
+.province::-webkit-progress-bar {
+  background: transparent;
+}
+
+.shadow-blur-blue::before {
+  display: block;
+  content: "";
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0 0 100px 100px #2b7fff;
+}
+
+.shadow-solid-red::before {
+  display: block;
+  content: "";
+  position: absolute;
+  z-index: 10;
+  right: -120px;
+  top: -120px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 30px solid rgb(251 44 54);
+}
+
+.shadow-solid-blue::after {
+  display: block;
+  content: "";
+  position: absolute;
+  z-index: 10;
+  left: -170px;
+  bottom: -120px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 30px solid rgb(5 223 114);
 }
