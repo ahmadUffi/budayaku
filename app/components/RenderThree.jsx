@@ -1,8 +1,9 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { Suspense, useMemo } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF, ContactShadows } from "@react-three/drei";
+import { invalidate } from "@react-three/fiber";
 
 const Model = ({
   glb,
@@ -16,15 +17,19 @@ const Model = ({
 }) => {
   const { scene } = useGLTF(glb);
 
-  scene.traverse((child) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-    }
-  });
+  const optimizedScene = useMemo(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    return scene;
+  }, [scene]);
 
   return (
     <primitive
-      object={scene}
+      object={optimizedScene}
       scale={scale}
       position={[px, py, pz]}
       rotation={[rx, rt, rz]}
@@ -43,21 +48,25 @@ const RenderThree = ({
   scale = 1,
   scaleShadow = 1,
   positionShadow = -1,
-  opacityShadow,
+  opacityShadow = 0.5,
   height = "100%",
   blurOpacity = 2.5,
 }) => {
   return (
-    <div style={{ width: "100%", height: height }}>
-      <Canvas shadows camera={{ position: [0, 2, 5], fov: 45 }}>
+    <div style={{ width: "100%", height }}>
+      <Canvas
+        shadows
+        camera={{ position: [0, 2, 5], fov: 45 }}
+        frameloop="demand"
+      >
         {/* Cahaya */}
         <ambientLight intensity={1} />
         <directionalLight
           castShadow
           position={[3, 5, 2]}
-          intensity={3}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
+          intensity={2}
+          shadow-mapSize-width={512}
+          shadow-mapSize-height={512}
         />
 
         <Suspense fallback={null}>
@@ -73,7 +82,7 @@ const RenderThree = ({
           />
         </Suspense>
 
-        {/* Bayangan realistis */}
+        {/* Bayangan kontak */}
         <ContactShadows
           position={[0, positionShadow, 0]}
           opacity={opacityShadow}
@@ -82,7 +91,12 @@ const RenderThree = ({
           far={5}
         />
 
-        <OrbitControls enableZoom={false} enableRotate />
+        {/* Kontrol kamera */}
+        <OrbitControls
+          enableZoom={false}
+          enableRotate
+          onChange={() => invalidate()}
+        />
       </Canvas>
     </div>
   );

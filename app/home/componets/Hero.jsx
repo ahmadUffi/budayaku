@@ -39,7 +39,7 @@ export default function Hero() {
         />
       </div>
 
-      <AvatarCircle position={"centerBottom"} src="" alt="" size="lg" />
+      {/* <AvatarCircle position={"centerBottom"} src="" alt="" size="lg" /> */}
     </div>
   );
 }

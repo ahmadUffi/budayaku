@@ -52,7 +52,10 @@ export default function Province() {
         {provinces.map((province, index) => (
           <div
             key={index}
-            className="w-max bg-white text-gray-800 font-semibold cursor-pointer py-3 px-6 rounded-sm shadow-[0_4px_0_#e5e7eb] :translate-y-1.5 active:translate-y-1.5 active:shadow-[0_1px_0_#e5e7eb]  border border-gray-200 transition-all duration-180 "
+            className="w-max bg-white text-gray-800 font-semibold cursor-pointer py-3 px-6 rounded-sm 
+  shadow-[0_4px_0_#e5e7eb] border border-gray-200 
+  active:translate-y-1.5 active:shadow-[0_1px_0_#e5e7eb] 
+  transition-transform duration-200 ease-in-out "
           >
             <div className="img"></div>
             <div className="title">{province}</div>
