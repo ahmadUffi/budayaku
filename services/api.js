@@ -27,7 +27,7 @@ export class ApiService {
             },
             body: JSON.stringify({
                 text: request.text,
-                voice: request.voice || 'Sadaltager',
+                voice: request.voice || 'Despina',
             }),
         });
 
