@@ -1,3 +1,5 @@
+"use client";
+
 import FloatChat from "../chat/FloatChat.";
 import Hero from "../components/componets/Hero";
 import OverviewIndonesia from "../components/componets/OverviewIndonesia";
