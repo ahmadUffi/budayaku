@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #0606e5;
   --foreground: #171717;
 }
 @font-face {
@@ -29,6 +29,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  background-color: #fafafb;
 }
 
 @font-face {
@@ -64,9 +65,10 @@ body {
   content: "";
   position: absolute;
   z-index: 10;
-  right: 0;
-  bottom: 0;
-  box-shadow: 0 0 100px 100px #2b7fff;
+  right: 50%;
+  bottom: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 180px 130px #2b7fff;
 }
 
 .shadow-solid-red::before {
@@ -80,7 +82,7 @@ body {
   height: 330px;
   border-radius: 50%;
   background-color: transparent;
-  border: 30px solid rgb(251 44 54);
+  border: 30px solid rgb(255 220 68);
 }
 
 .shadow-solid-blue::after {
@@ -94,5 +96,5 @@ body {
   height: 330px;
   border-radius: 50%;
   background-color: transparent;
-  border: 30px solid rgb(5 223 114);
+  border: 30px solid rgb(156 71 18);
 }

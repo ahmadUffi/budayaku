@@ -1,3 +1,5 @@
+import mainbg from "@/public/images/bg-color.png";
+
 export default function Province() {
   const provinces = [
     "Aceh",
@@ -40,15 +42,33 @@ export default function Province() {
     "Papua Selatan",
   ];
 
+  const threed = {
+    color: "#2b7fff",
+    fontWeight: "900",
+    textShadow: `
+    0.0075em 0.0075em 0 rgba(20, 60, 120, 0.2),
+    0.005em 0.005em 0 rgba(20, 60, 120, 0.3),
+    0.01em 0.01em 0 rgba(20, 60, 120, 0.4),
+    0.015em 0.015em 0 rgba(20, 60, 120, 0.5),
+    0.02em 0.02em 0 rgba(20, 60, 120, 0.6),
+    0.025em 0.025em 0 rgba(20, 60, 120, 0.7),
+    0.03em 0.03em 0 rgba(20, 60, 120, 0.8),
+    0.035em 0.035em 0 rgba(20, 60, 120, 0.9)
+  `,
+  };
+
   return (
-    <div className="flex flex-col h-screen -100 mt-[200px] text-blue-500">
-      <h1 className="text-4xl font-bold mb-4">
-        Selamat Datang di Halaman Provinsi
-      </h1>
-      <p className="text-lg text-gray-700 mt-2">
-        Silakan pilih provinsi untuk melihat detail lebih lanjut.
-      </p>
-      <div className="flex gap-3 flex-wrap p-30 justify-around province realtive">
+    <div
+      className="flex flex-col mt-20 text-blue-500 relative z-30  backdrop-blur bg-white/60 border border-white/20 rounded-xl shadow-lg p-6 shadow-blur-blue"
+      style={{ backgroundImage: `url(${mainbg.src})` }}
+    >
+      <h5
+        className=" text-gray-700 mt-2 lg:text-4xl md:text-3xl text-2xl mb-5 "
+        style={threed}
+      >
+        38 Provinsi Yang Ads Di Indonesia
+      </h5>
+      <div className="flex gap-3 flex-wrap justify-between province realtive z-80 ">
         {provinces.map((province, index) => (
           <div
             key={index}

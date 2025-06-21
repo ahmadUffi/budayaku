@@ -6,8 +6,8 @@ import mainbg from "@/public/images/bg-color.png";
 export default function Hero() {
   return (
     <div
-      className="h-[100dvh] items-center bg-cover bg-center grid md:grid-cols-2 relative z-80 shadow-solid-red shadow-solid-blue"
-      // style={{ backgroundImage: `url(${mainbg.src})` }}
+      className="h-[100dvh] bg-transparent items-center bg-cover bg-center grid md:grid-cols-2 relative z-80 shadow-solid-red shadow-solid-blue"
+      style={{ backgroundImage: `url(${mainbg.src})` }}
     >
       <div className="title lg:py-30 pl-40 flex flex-col gap-10 relative z-40">
         <div className="text">
@@ -39,7 +39,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* <AvatarCircle position={"centerBottom"} src="" alt="" size="lg" /> */}
+      <AvatarCircle position={"centerBottom"} src="" alt="" size="lg" />
     </div>
   );
 }

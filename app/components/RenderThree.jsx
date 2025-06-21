@@ -1,9 +1,25 @@
 "use client";
 
-import React, { Suspense, useMemo } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF, ContactShadows } from "@react-three/drei";
-import { invalidate } from "@react-three/fiber";
+import React, { Suspense, useMemo, useRef, useEffect, useState } from "react";
+import { Canvas, useFrame, invalidate } from "@react-three/fiber";
+import {
+  OrbitControls,
+  useGLTF,
+  ContactShadows,
+  useProgress,
+  Html,
+} from "@react-three/drei";
+
+const Loader = () => {
+  const { progress } = useProgress();
+  return (
+    <Html center>
+      <div style={{ textAlign: "center", color: "#555", fontSize: 16 }}>
+        Loading... {Math.floor(progress)}%
+      </div>
+    </Html>
+  );
+};
 
 const Model = ({
   glb,
@@ -16,6 +32,8 @@ const Model = ({
   scale = 1,
 }) => {
   const { scene } = useGLTF(glb);
+  const groupRef = useRef();
+  const [loaded, setLoaded] = useState(false);
 
   const optimizedScene = useMemo(() => {
     scene.traverse((child) => {
@@ -27,13 +45,27 @@ const Model = ({
     return scene;
   }, [scene]);
 
+  useEffect(() => {
+    setLoaded(true);
+  }, [scene]);
+
+  useFrame((state) => {
+    if (loaded && groupRef.current) {
+      const t = state.clock.getElapsedTime();
+      groupRef.current.rotation.y = Math.sin(t * 1.5) * 0.1;
+      invalidate();
+    }
+  });
+
   return (
-    <primitive
-      object={optimizedScene}
-      scale={scale}
-      position={[px, py, pz]}
-      rotation={[rx, rt, rz]}
-    />
+    <group ref={groupRef}>
+      <primitive
+        object={optimizedScene}
+        scale={scale}
+        position={[px, py, pz]}
+        rotation={[rx, rt, rz]}
+      />
+    </group>
   );
 };
 
@@ -52,24 +84,38 @@ const RenderThree = ({
   height = "100%",
   blurOpacity = 2.5,
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <div style={{ width: "100%", height }}>
       <Canvas
-        shadows
-        camera={{ position: [0, 2, 5], fov: 45 }}
+        shadows={!isMobile}
+        dpr={isMobile ? 1 : 2}
+        camera={{
+          position: isMobile ? [0, 1.5, 3.5] : [0, 2, 5],
+          fov: isMobile ? 50 : 45,
+        }}
         frameloop="demand"
       >
-        {/* Cahaya */}
-        <ambientLight intensity={1} />
+        <ambientLight intensity={isMobile ? 0.7 : 1} />
         <directionalLight
-          castShadow
+          castShadow={!isMobile}
           position={[3, 5, 2]}
-          intensity={2}
-          shadow-mapSize-width={512}
-          shadow-mapSize-height={512}
+          intensity={isMobile ? 1.5 : 2.5}
+          shadow-mapSize-width={isMobile ? 256 : 512}
+          shadow-mapSize-height={isMobile ? 256 : 512}
         />
 
-        <Suspense fallback={null}>
+        <Suspense fallback={<Loader />}>
           <Model
             glb={glb}
             px={px}
@@ -82,16 +128,16 @@ const RenderThree = ({
           />
         </Suspense>
 
-        {/* Bayangan kontak */}
-        <ContactShadows
-          position={[0, positionShadow, 0]}
-          opacity={opacityShadow}
-          scale={scaleShadow}
-          blur={blurOpacity}
-          far={5}
-        />
+        {!isMobile && (
+          <ContactShadows
+            position={[0, positionShadow, 0]}
+            opacity={opacityShadow}
+            scale={scaleShadow}
+            blur={blurOpacity}
+            far={5}
+          />
+        )}
 
-        {/* Kontrol kamera */}
         <OrbitControls
           enableZoom={false}
           enableRotate
