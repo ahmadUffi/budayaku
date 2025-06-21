@@ -1,3 +1,5 @@
+import HomePage from "./home/page";
+
 export default function Home() {
-  return <h1>hai</h1>;
+  return <HomePage />;
 }

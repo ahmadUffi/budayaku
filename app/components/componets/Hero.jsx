@@ -29,7 +29,7 @@ export default function Hero() {
 
       <div className="images h-full md:mt-[-10px] relative z-30">
         <RenderThree
-          glb={"/ui/hero.glb"}
+          glb={"../../ui/hero.glb"}
           scale={1.7}
           py={-1.5}
           rt={12}
