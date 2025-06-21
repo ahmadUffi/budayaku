@@ -22,7 +22,7 @@ export default function HomePage() {
       >
         <PilihanBelajar />
         <Province />
-        {/* <OverviewIndonesia /> */}
+        <OverviewIndonesia /> 
       </div>
       <Footer />
       <FloatChat />
