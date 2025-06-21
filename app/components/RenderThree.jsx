@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useMemo, useRef, useEffect, useState } from "react";
-import { Canvas, useFrame, invalidate } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import {
   OrbitControls,
   useGLTF,
@@ -33,29 +33,31 @@ const Model = ({
 }) => {
   const { scene } = useGLTF(glb);
   const groupRef = useRef();
-  const [loaded, setLoaded] = useState(false);
 
   const optimizedScene = useMemo(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
+        child.castShadow = false;
+        child.receiveShadow = false;
       }
     });
     return scene;
   }, [scene]);
 
   useEffect(() => {
-    setLoaded(true);
+    return () => {
+      scene.traverse((child) => {
+        if (child.isMesh) {
+          child.geometry.dispose();
+          if (Array.isArray(child.material)) {
+            child.material.forEach((m) => m.dispose());
+          } else {
+            child.material.dispose();
+          }
+        }
+      });
+    };
   }, [scene]);
-
-  useFrame((state) => {
-    if (loaded && groupRef.current) {
-      const t = state.clock.getElapsedTime();
-      groupRef.current.rotation.y = Math.sin(t * 1.5) * 0.1;
-      invalidate();
-    }
-  });
 
   return (
     <group ref={groupRef}>
@@ -99,21 +101,30 @@ const RenderThree = ({
     <div style={{ width: "100%", height }}>
       <Canvas
         shadows={!isMobile}
-        dpr={isMobile ? 1 : 2}
+        dpr={1}
         camera={{
           position: isMobile ? [0, 1.5, 3.5] : [0, 2, 5],
           fov: isMobile ? 50 : 45,
         }}
         frameloop="demand"
+        onCreated={({ gl }) => {
+          const canvas = gl.getContext().canvas;
+          canvas.addEventListener("webglcontextlost", (e) => {
+            e.preventDefault();
+            console.warn("WebGL context lost. Silakan refresh halaman.");
+          });
+        }}
       >
-        <ambientLight intensity={isMobile ? 0.7 : 1} />
-        <directionalLight
-          castShadow={!isMobile}
-          position={[3, 5, 2]}
-          intensity={isMobile ? 1.5 : 2.5}
-          shadow-mapSize-width={isMobile ? 256 : 512}
-          shadow-mapSize-height={isMobile ? 256 : 512}
-        />
+        <ambientLight intensity={0.7} />
+        {!isMobile && (
+          <directionalLight
+            position={[3, 5, 2]}
+            intensity={1.5}
+            shadow-mapSize-width={256}
+            shadow-mapSize-height={256}
+            castShadow={false}
+          />
+        )}
 
         <Suspense fallback={<Loader />}>
           <Model
@@ -138,11 +149,7 @@ const RenderThree = ({
           />
         )}
 
-        <OrbitControls
-          enableZoom={false}
-          enableRotate
-          onChange={() => invalidate()}
-        />
+        <OrbitControls enableZoom={false} enableRotate />
       </Canvas>
     </div>
   );
