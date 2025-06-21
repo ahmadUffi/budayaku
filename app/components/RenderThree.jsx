@@ -32,6 +32,7 @@ const Model = ({
   scale = 1,
 }) => {
   const { scene } = useGLTF(glb);
+
   const groupRef = useRef();
 
   const optimizedScene = useMemo(() => {
