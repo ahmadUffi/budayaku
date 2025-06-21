@@ -8,7 +8,7 @@ export default function OverviewIndonesia() {
     >
       <div className="threed relative z-30">
         <RenderThree
-          glb="../../ui/petaindonesia.glb"
+          glb="/ui/petaIndonesia.glb"
           scale={0.2}
           rt={30}
           rz={-0.28}
