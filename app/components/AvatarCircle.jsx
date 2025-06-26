@@ -33,7 +33,7 @@ export default function AvatarCircle({
 
   return (
     <div
-      className={`rounded-full overflow-hidden ${finalSize} absolute ${finalPosition} border-b-9 border-[#F9ECBD]`}
+      className={`rounded-full overflow-hidden ${finalSize} absolute ${finalPosition} border-b-9 border-[#F9ECBD] z-90`}
       style={{ backgroundColor: "#f0f0f0" }}
     >
       {src ? <Image src={src} alt={alt} width={100} height={100} /> : null}

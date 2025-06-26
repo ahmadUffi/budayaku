@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Suspense, useMemo, useRef, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame, invalidate } from "@react-three/fiber";
 import {
   OrbitControls,
   useGLTF,
@@ -32,33 +32,31 @@ const Model = ({
   scale = 1,
 }) => {
   const { scene } = useGLTF(glb);
-
   const groupRef = useRef();
+  const [loaded, setLoaded] = useState(false);
 
   const optimizedScene = useMemo(() => {
-    scene.traverse((child) => {
+    const cloned = scene.clone(true);
+    cloned.traverse((child) => {
       if (child.isMesh) {
-        child.castShadow = false;
-        child.receiveShadow = false;
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
-    return scene;
+    return cloned;
   }, [scene]);
 
   useEffect(() => {
-    return () => {
-      scene.traverse((child) => {
-        if (child.isMesh) {
-          child.geometry.dispose();
-          if (Array.isArray(child.material)) {
-            child.material.forEach((m) => m.dispose());
-          } else {
-            child.material.dispose();
-          }
-        }
-      });
-    };
+    setLoaded(true);
   }, [scene]);
+
+  useFrame((state) => {
+    if (loaded && groupRef.current) {
+      const t = state.clock.getElapsedTime();
+      groupRef.current.rotation.y = Math.sin(t * 1.5) * 0.1;
+      invalidate();
+    }
+  });
 
   return (
     <group ref={groupRef}>
@@ -102,30 +100,21 @@ const RenderThree = ({
     <div style={{ width: "100%", height }}>
       <Canvas
         shadows={!isMobile}
-        dpr={1}
+        dpr={isMobile ? 1 : 2}
         camera={{
           position: isMobile ? [0, 1.5, 3.5] : [0, 2, 5],
           fov: isMobile ? 50 : 45,
         }}
         frameloop="demand"
-        onCreated={({ gl }) => {
-          const canvas = gl.getContext().canvas;
-          canvas.addEventListener("webglcontextlost", (e) => {
-            e.preventDefault();
-            console.warn("WebGL context lost. Silakan refresh halaman.");
-          });
-        }}
       >
-        <ambientLight intensity={0.7} />
-        {!isMobile && (
-          <directionalLight
-            position={[3, 5, 2]}
-            intensity={1.5}
-            shadow-mapSize-width={256}
-            shadow-mapSize-height={256}
-            castShadow={false}
-          />
-        )}
+        <ambientLight intensity={isMobile ? 0.7 : 1} />
+        <directionalLight
+          castShadow={!isMobile}
+          position={[3, 5, 2]}
+          intensity={isMobile ? 1.5 : 2.5}
+          shadow-mapSize-width={isMobile ? 256 : 512}
+          shadow-mapSize-height={isMobile ? 256 : 512}
+        />
 
         <Suspense fallback={<Loader />}>
           <Model
@@ -150,7 +139,11 @@ const RenderThree = ({
           />
         )}
 
-        <OrbitControls enableZoom={false} enableRotate />
+        <OrbitControls
+          enableZoom={false}
+          enableRotate
+          onChange={() => invalidate()}
+        />
       </Canvas>
     </div>
   );

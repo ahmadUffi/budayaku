@@ -1,6 +1,7 @@
 "use client";
 
 import FloatChat from "../chat/FloatChat.";
+import AvatarCircle from "../components/AvatarCircle";
 import Hero from "../components/componets/Hero";
 import OverviewIndonesia from "../components/componets/OverviewIndonesia";
 import PilihanBelajar from "../components/componets/PilihanBelajar";
@@ -9,10 +10,12 @@ import Footer from "../components/Footer";
 
 export default function HomePage() {
   return (
-    <div className="relative z-20">
+    <div className="">
       <Hero />
+      <AvatarCircle position={"centerBottom"} src="" alt="" size="lg" />
+
       <div
-        className="lg:p-25 md:p-15 p-3 "
+        className="lg:p-25 md:p-15 p-3 relative z-90 "
         style={{
           // backgroundImage: `url(${mainbg.src})`,
           backgroundRepeat: "no-repeat",
@@ -22,7 +25,7 @@ export default function HomePage() {
       >
         <PilihanBelajar />
         <Province />
-        {/* <OverviewIndonesia /> */}
+        <OverviewIndonesia />
       </div>
       <Footer />
       <FloatChat />

@@ -59,8 +59,8 @@ export default function Province() {
 
   return (
     <div
-      className="flex flex-col mt-20 text-blue-500 relative z-30  backdrop-blur bg-white/60 border border-white/20 rounded-xl shadow-lg p-6 shadow-blur-blue"
-      style={{ backgroundImage: `url(${mainbg.src})` }}
+      className=" lg:h-max h-99 flex flex-col mt-20 text-blue-500 relative z-30  backdrop-blur bg-white/60 border border-white/20 rounded-xl shadow-lg p-6 shadow-blur-blue"
+      // style={{ backgroundImage: `url(${mainbg.src})` }}
     >
       <h5
         className=" text-gray-700 mt-2 lg:text-4xl md:text-3xl text-2xl mb-5 "
@@ -68,14 +68,14 @@ export default function Province() {
       >
         38 Provinsi Yang Ads Di Indonesia
       </h5>
-      <div className="flex gap-3 flex-wrap justify-between province realtive z-80 ">
+      <div className="flex gap-3 overflow-auto flex-wrap justify-center province realtive z-80 ">
         {provinces.map((province, index) => (
           <div
             key={index}
-            className="w-max bg-white text-gray-800 font-semibold cursor-pointer py-3 px-6 rounded-sm 
-  shadow-[0_4px_0_#e5e7eb] border border-gray-200 
-  active:translate-y-1.5 active:shadow-[0_1px_0_#e5e7eb] 
-  transition-transform duration-200 ease-in-out "
+            className="w-max h-max bg-white text-gray-800 font-semibold cursor-pointer py-3 px-6 rounded-sm 
+            shadow-[0_4px_0_#e5e7eb] border border-gray-200 
+            active:translate-y-1.5 active:shadow-[0_1px_0_#e5e7eb] 
+            transition-transform duration-200 ease-in-out "
           >
             <div className="img"></div>
             <div className="title">{province}</div>

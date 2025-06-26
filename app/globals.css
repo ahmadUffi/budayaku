@@ -98,3 +98,8 @@ body {
   background-color: transparent;
   border: 30px solid rgb(156 71 18);
 }
+
+/* styles/global.css */
+.text-3d {
+  text-shadow: 2px 2px 0 #00000033, 4px 4px 0 #00000022;
+}

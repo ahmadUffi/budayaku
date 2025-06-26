@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Card({ image = "", title = "", description = "" }) {
   return (
-    <div className="cursor-pointer max-w-xs max-h-2xl h-2xl mx-auto bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-105 hover:rotate-1">
+    <div className="cursor-pointer w-xs max-h-2xl h-2xl mx-auto bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-105 hover:rotate-1">
       <Image
         src={image}
         alt="Card Image"
