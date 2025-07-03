@@ -3,7 +3,7 @@ import RenderThree from "./RenderThree";
 
 const Section = ({ reverse = false, desc, gambar3d, title }) => {
   return (
-    <div>
+    <div className="bg-white/10 h-max backdrop-blur shadow-md border-black/20 rounded-lg">
       <div
         className={`grid md:grid-cols-2 mt-5 items-center overview-indonesia relative z-40 `}
         id="shadow-blur"
@@ -18,7 +18,6 @@ const Section = ({ reverse = false, desc, gambar3d, title }) => {
             scale={0.2}
             rt={30}
             rz={-0.28}
-            shadow={true}
             height="400px"
             scaleShadow={6}
             opacityShadow={0.2}

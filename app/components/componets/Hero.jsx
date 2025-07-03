@@ -3,10 +3,10 @@ import Button from "@/app/components/Button";
 import RenderThree from "@/app/components/RenderThree";
 import mainbg from "@/public/images/bg-color.png";
 
-export default function Hero() {
+export default function Hero({ className = "" }) {
   return (
     <div
-      className="h-[100dvh] overflow-hidden bg-transparent items-center bg-cover bg-center grid grid-cols-2 relative z-80 shadow-solid-red shadow-solid-blue"
+      className=" h-[100dvh] overflow-hidden bg-transparent items-center bg-cover bg-center grid grid-cols-2 relative z-80 shadow-solid-red shadow-solid-blue"
       style={{ backgroundImage: `url(${mainbg.src})` }}
     >
       <div className="title  lg:py-30 lg:pl-40 p-20 flex flex-col gap-10 lg:relative z-40 absolute">
@@ -27,15 +27,16 @@ export default function Hero() {
         </Button>
       </div>
 
-      <div className="images h-full w-[100dvw] lg:w-2xl relative z-30  flex justify-center items-center ">
+      <div className=" h-full w-[100vw] lg:w-2xl relative z-30  flex justify-center items-center ">
         <RenderThree
-          glb={"/ui/hero.glb"}
-          scale={1.7}
-          py={-1.5}
-          rt={12}
-          scaleShadow={5}
-          opacityShadow={0.1}
-          positionShadow={-1.6}
+          glb={"../ui/maskotfix.glb"}
+          scale={0.8}
+          rt={0}
+          rz={0}
+          height="100%"
+          scaleShadow={9}
+          opacityShadow={0.2}
+          positionShadow={-2}
         />
       </div>
 

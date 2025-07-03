@@ -15,7 +15,7 @@ export default function HomePage() {
       <AvatarCircle position={"centerBottom"} src="" alt="" size="lg" />
 
       <div
-        className="lg:p-25 md:p-15 p-3 relative z-90 "
+        className="lg:p-25 md:p-15 p-3 relative z-90 flex flex-col gap-20"
         style={{
           // backgroundImage: `url(${mainbg.src})`,
           backgroundRepeat: "no-repeat",
@@ -25,10 +25,10 @@ export default function HomePage() {
       >
         <PilihanBelajar />
         <Province />
+
         <OverviewIndonesia />
       </div>
       <Footer />
-      <FloatChat />
     </div>
   );
 }

@@ -36,11 +36,14 @@ const Model = ({
   const [loaded, setLoaded] = useState(false);
 
   const optimizedScene = useMemo(() => {
-    const cloned = scene.clone(true);
+    const cloned = scene; // Deep clone
     cloned.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
+        // Jika pakai material sharing, clone juga:
+        child.material = child.material.clone();
+        child.geometry = child.geometry.clone();
       }
     });
     return cloned;
@@ -84,6 +87,7 @@ const RenderThree = ({
   opacityShadow = 0.5,
   height = "100%",
   blurOpacity = 2.5,
+  classname = "",
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -97,7 +101,7 @@ const RenderThree = ({
   }, []);
 
   return (
-    <div style={{ width: "100%", height }}>
+    <div style={{ width: "100%", height }} className={classname}>
       <Canvas
         shadows={!isMobile}
         dpr={isMobile ? 1 : 2}
@@ -112,8 +116,10 @@ const RenderThree = ({
           castShadow={!isMobile}
           position={[3, 5, 2]}
           intensity={isMobile ? 1.5 : 2.5}
-          shadow-mapSize-width={isMobile ? 256 : 512}
-          shadow-mapSize-height={isMobile ? 256 : 512}
+          shadowMapSize={{
+            width: isMobile ? 256 : 512,
+            height: isMobile ? 256 : 512,
+          }}
         />
 
         <Suspense fallback={<Loader />}>
