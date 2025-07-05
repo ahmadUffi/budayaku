@@ -2,6 +2,7 @@ import AvatarCircle from "@/app/components/AvatarCircle";
 import Button from "@/app/components/Button";
 import RenderThree from "@/app/components/RenderThree";
 import mainbg from "@/public/images/bg-color.png";
+import ModelViewer from "../ModelViewer";
 
 export default function Hero({ className = "" }) {
   return (
@@ -28,15 +29,11 @@ export default function Hero({ className = "" }) {
       </div>
 
       <div className=" h-full w-[100vw] lg:w-2xl relative z-30  flex justify-center items-center ">
-        <RenderThree
-          glb={"../ui/maskotfix.glb"}
-          scale={0.8}
-          rt={0}
-          rz={0}
-          height="100%"
-          scaleShadow={9}
-          opacityShadow={0.2}
-          positionShadow={-2}
+        <ModelViewer
+          src="../ui/maskot.glb"
+          width="600px"
+          height="600px"
+          alt="My 3D Object"
         />
       </div>
 

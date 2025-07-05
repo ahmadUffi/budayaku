@@ -1,5 +1,4 @@
-"use client";
-
+import { ShineBorder } from "@/components/magicui/shine-border";
 import FloatChat from "../chat/FloatChat.";
 import AvatarCircle from "../components/AvatarCircle";
 import Hero from "../components/componets/Hero";
@@ -7,6 +6,7 @@ import OverviewIndonesia from "../components/componets/OverviewIndonesia";
 import PilihanBelajar from "../components/componets/PilihanBelajar";
 import Province from "../components/componets/Province";
 import Footer from "../components/Footer";
+import RenderThree from "../components/RenderThree";
 
 export default function HomePage() {
   return (
@@ -25,8 +25,7 @@ export default function HomePage() {
       >
         <PilihanBelajar />
         <Province />
-
-        <OverviewIndonesia />
+        {/* <OverviewIndonesia /> */}
       </div>
       <Footer />
     </div>

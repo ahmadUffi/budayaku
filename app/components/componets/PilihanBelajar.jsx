@@ -2,23 +2,24 @@ import Image from "next/image";
 import membaca from "@/public/images/membaca.jpeg";
 import berbicara from "@/public/images/berbicara.jpeg";
 import Card from "@/app/components/Card";
+import Link from "next/link";
 
 export default function PilihanBelajar() {
   const listPilihan = [
     {
-      judul: "Membca Sambil Bertanya",
-      desk: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore soluta in labore doloribus consequatur id.",
+      judul: "Yuk belajaar dengan membaca sambil berdiskusi dengan Saraswati",
       image: membaca,
+      navigate: "/membaca",
     },
     {
-      judul: "Berbicara Dengan AI",
-      desk: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore soluta in labore doloribus consequatur id.",
+      judul: "Yuk belajaar sambil ngobrol langusng dengan saraswati",
       image: berbicara,
+      navigate: "/berbicara",
     },
     {
-      judul: "Membca Sambil Bertanya",
-      desk: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore soluta in labore doloribus consequatur id.",
+      judul: "yuk lihat versi kamu, saat jadi menggunakan baju adat",
       image: membaca,
+      navigate: "/membaca",
     },
   ];
 
@@ -45,14 +46,19 @@ export default function PilihanBelajar() {
       <p className="text-black text-center mt-4 font-bold text-lg">
         Pilih Metode Pembalajaran Yang Kamu Mau
       </p>
-      <div className="pilihan flex flex-wrap mt-12 gap-8">
+      <div className="pilihan flex flex-wrap md:flex-nowrap mt-12">
         {listPilihan.map((list, index) => (
-          <Card
+          <Link
             key={index}
-            title={list.judul}
-            image={list.image}
-            description={list.desk}
-          />
+            href={list.navigate}
+            className="w-full md:w-1/3 p-4"
+          >
+            <Card
+              title={list.judul}
+              image={list.image}
+              description={list.desk}
+            />
+          </Link>
         ))}
       </div>
     </div>
