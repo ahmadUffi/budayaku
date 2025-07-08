@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import ChatMessage from '../components/ChatMessage';
 import ProvinceSelector from '../components/ProvinceSelector';
 import { ApiService } from '../services/api';
+import ImageUpload from '../components/ImageUpload';
 
 export default function Home() {
   const [messages, setMessages] = useState([]);
@@ -16,6 +17,7 @@ export default function Home() {
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const audioRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,27 +58,89 @@ export default function Home() {
   };
 
   const handleSendMessage = async () => {
-    if (!inputText.trim() || isLoading || isGeneratingImage) return;
-
-    const userMessage = {
-      text: inputText,
-      isUser: true,
-      id: Date.now().toString(),
-      type: chatMode,
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputText('');
-
-    if (chatMode === 'text') {
-      setIsLoading(true);
+    // Untuk mode image dengan uploaded image, tidak perlu input text
+    if (chatMode === 'image' && uploadedImage && !inputText.trim()) {
       try {
+        // Validasi uploaded image
+        if (!uploadedImage.base64) {
+          throw new Error('Image data tidak valid');
+        }
+
+        // Auto-generate user message untuk uploaded image
+        const userMessage = {
+          text: `Modifikasi gambar dengan budaya ${selectedProvince}`,
+          isUser: true,
+          id: Date.now().toString(),
+          type: 'image',
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+        setIsGeneratingImage(true);
+
+        const response = await ApiService.generateImageFromTextAndImage({
+          province: selectedProvince,
+          image_base64: uploadedImage.base64,
+        });
+
+        // Validasi response
+        if (!response) {
+          throw new Error('Response tidak valid dari server');
+        }
+
+        const botMessage = {
+          text: response.description || 'Gambar berhasil dimodifikasi dengan budaya daerah!',
+          isUser: false,
+          id: (Date.now() + 1).toString(),
+          type: 'image',
+          imageBase64: response.image_base64,
+        };
+
+        setMessages(prev => [...prev, botMessage]);
+        setUploadedImage(null); // Reset uploaded image setelah berhasil
+
+      } catch (error) {
+        console.error('Error generating image:', error);
+        const errorMessage = {
+          text: `Maaf, terjadi kesalahan saat memodifikasi gambar: ${error.message}`,
+          isUser: false,
+          id: (Date.now() + 1).toString(),
+          type: 'text',
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsGeneratingImage(false);
+      }
+      return;
+    }
+
+    // Validasi untuk mode lainnya
+    if (chatMode === 'text' && (!inputText.trim() || isLoading)) return;
+    if (chatMode === 'image' && !uploadedImage && !inputText.trim()) return;
+    if (isGeneratingImage) return;
+
+    try {
+      const userMessage = {
+        text: inputText,
+        isUser: true,
+        id: Date.now().toString(),
+        type: chatMode,
+      };
+
+      setMessages(prev => [...prev, userMessage]);
+      setInputText('');
+
+      if (chatMode === 'text') {
+        setIsLoading(true);
         const history = generateChatHistory();
         const response = await ApiService.generateText({
           history,
           province: selectedProvince,
           new_chat: inputText,
         });
+
+        if (!response || !response.response) {
+          throw new Error('Response tidak valid dari server');
+        }
 
         const botMessage = {
           text: response.response,
@@ -86,29 +150,20 @@ export default function Home() {
         };
 
         setMessages(prev => [...prev, botMessage]);
-
         setTimeout(() => {
           autoPlayLastBotMessage(botMessage);
         }, 100);
-      } catch (error) {
-        console.error('Error generating text:', error);
-        const errorMessage = {
-          text: 'Maaf, terjadi kesalahan saat memproses pesan Anda.',
-          isUser: false,
-          id: (Date.now() + 1).toString(),
-          type: 'text',
-        };
-        setMessages(prev => [...prev, errorMessage]);
-      } finally {
-        setIsLoading(false);
-      }
-    } else if (chatMode === 'image') {
-      setIsGeneratingImage(true);
-      try {
+
+      } else if (chatMode === 'image') {
+        setIsGeneratingImage(true);
         const response = await ApiService.generateImage({
           prompt: inputText,
           province: selectedProvince,
         });
+
+        if (!response) {
+          throw new Error('Response tidak valid dari server');
+        }
 
         const botMessage = {
           text: response.description || 'Gambar berhasil dibuat!',
@@ -119,18 +174,19 @@ export default function Home() {
         };
 
         setMessages(prev => [...prev, botMessage]);
-      } catch (error) {
-        console.error('Error generating image:', error);
-        const errorMessage = {
-          text: 'Maaf, terjadi kesalahan saat membuat gambar. Pastikan permintaan Anda berkaitan dengan budaya Indonesia.',
-          isUser: false,
-          id: (Date.now() + 1).toString(),
-          type: 'text',
-        };
-        setMessages(prev => [...prev, errorMessage]);
-      } finally {
-        setIsGeneratingImage(false);
       }
+    } catch (error) {
+      console.error('Error in handleSendMessage:', error);
+      const errorMessage = {
+        text: `Maaf, terjadi kesalahan: ${error.message}`,
+        isUser: false,
+        id: (Date.now() + 1).toString(),
+        type: 'text',
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+      setIsGeneratingImage(false);
     }
   };
 
@@ -228,6 +284,63 @@ export default function Home() {
     setIsGeneratingImage(false);
   };
 
+  const handleImageUpload = (base64, fileName) => {
+    try {
+      // Validasi base64
+      if (!base64 || typeof base64 !== 'string') {
+        throw new Error('Invalid base64 data');
+      }
+
+      // Validasi file name
+      if (!fileName || typeof fileName !== 'string') {
+        throw new Error('Invalid file name');
+      }
+
+      setUploadedImage({ base64, name: fileName });
+      console.log('Image uploaded successfully:', fileName);
+    } catch (error) {
+      console.error('Error handling image upload:', error);
+      alert('Gagal mengupload gambar. Silakan coba lagi.');
+    }
+  };
+
+  const handleImageRemove = () => {
+    try {
+      setUploadedImage(null);
+      console.log('Image removed successfully');
+    } catch (error) {
+      console.error('Error removing image:', error);
+    }
+  };
+
+  const isSendDisabled = () => {
+    if (isLoading || isGeneratingImage) return true;
+
+    if (chatMode === 'text') {
+      return !inputText.trim();
+    } else if (chatMode === 'image') {
+      // Jika ada uploaded image, tidak perlu input text
+      if (uploadedImage) return false;
+      // Jika tidak ada uploaded image, perlu input text
+      return !inputText.trim();
+    }
+
+    return true;
+  };
+
+  const getPlaceholder = () => {
+    if (chatMode === 'text') {
+      return 'Ketik pesan Anda di sini...';
+    } else if (chatMode === 'image') {
+      if (uploadedImage) {
+        return 'Gambar siap diproses dengan budaya daerah yang dipilih. Klik kirim untuk memulai!';
+      } else {
+        return 'Deskripsikan gambar budaya Indonesia yang ingin dibuat...';
+      }
+    }
+    return '';
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto p-4">
@@ -252,8 +365,8 @@ export default function Home() {
               <button
                 onClick={() => handleModeChange('text')}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${chatMode === 'text'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,8 +377,8 @@ export default function Home() {
               <button
                 onClick={() => handleModeChange('image')}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${chatMode === 'image'
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -281,6 +394,27 @@ export default function Home() {
               }
             </p>
           </div>
+
+          {/* Image Upload Section - Only show in image mode */}
+          {chatMode === 'image' && (
+            <div className="p-4 border-b bg-purple-50">
+              <h3 className="text-sm font-medium text-purple-700 mb-3">
+                Upload Gambar Referensi
+              </h3>
+              <ImageUpload
+                onImageUpload={handleImageUpload}
+                onImageRemove={handleImageRemove}
+                uploadedImage={uploadedImage}
+                isReadyToProcess={chatMode === 'image' && uploadedImage}
+              />
+              <p className="text-xs text-purple-600 mt-2">
+                {uploadedImage
+                  ? `Gambar siap dimodifikasi dengan budaya ${selectedProvince}. Klik tombol "Proses Gambar" untuk memulai.`
+                  : 'Upload gambar untuk dimodifikasi dengan budaya daerah, atau biarkan kosong untuk generate gambar dari teks.'
+                }
+              </p>
+            </div>
+          )}
 
           {/* Chat Messages */}
           <div className="chat-container">
@@ -360,19 +494,16 @@ export default function Home() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder={
-                  chatMode === 'text'
-                    ? 'Ketik pesan Anda di sini...'
-                    : 'Deskripsikan gambar budaya Indonesia yang ingin dibuat...'
-                }
+                placeholder={getPlaceholder()}
                 className="flex-1 p-2 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 rows={2}
-                disabled={isLoading || isGeneratingImage}
+                disabled={isLoading || isGeneratingImage || (chatMode === 'image' && uploadedImage)}
+                readOnly={chatMode === 'image' && uploadedImage}
               />
               <button
                 onClick={handleSendMessage}
-                disabled={isLoading || isGeneratingImage || !inputText.trim()}
-                className={`px-4 py-2 text-white rounded-md font-medium transition-colors ${isLoading || isGeneratingImage || !inputText.trim()
+                disabled={isSendDisabled()}
+                className={`px-4 py-2 text-white rounded-md font-medium transition-colors ${isSendDisabled()
                     ? 'bg-gray-300 cursor-not-allowed'
                     : chatMode === 'image'
                       ? 'bg-purple-600 hover:bg-purple-700'
@@ -382,10 +513,12 @@ export default function Home() {
                 {isLoading
                   ? 'Sending...'
                   : isGeneratingImage
-                    ? 'Creating...'
-                    : chatMode === 'image'
-                      ? 'Generate'
-                      : 'Send'
+                    ? 'Processing...'
+                    : chatMode === 'image' && uploadedImage
+                      ? 'Proses Gambar'
+                      : chatMode === 'image'
+                        ? 'Generate'
+                        : 'Send'
                 }
               </button>
             </div>

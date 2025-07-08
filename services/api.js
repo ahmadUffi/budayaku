@@ -75,4 +75,59 @@ export class ApiService {
 
         return result;
     }
+
+    // Perubahan di generateImageFromTextAndImage
+
+    static async generateImageFromTextAndImage(request) {
+        console.log("Requesting image generation from image and province:", request.province);
+
+        const response = await fetch(`${API_BASE_URL}/chat/generate-image-from-text-and-image`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                // prompt: request.prompt, // Bisa dihapus jika tidak dibutuhkan
+                province: request.province,
+                image_base64: request.image_base64,
+            }),
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error("Image from Text+Image API Error:", text);
+            throw new Error(`Failed to generate image from text and image: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Image from image+province generation result:", result);
+
+        return result;
+        }// Perubahan di generateImageFromTextAndImage
+
+    static async generateImageFromTextAndImage(request) {
+        console.log("Requesting image generation from image and province:", request.province);
+
+        const response = await fetch(`${API_BASE_URL}/chat/generate-image-from-text-and-image`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                province: request.province,
+                image_base64: request.image_base64,
+            }),
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error("Image from Text+Image API Error:", text);
+            throw new Error(`Failed to generate image from text and image: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Image from image+province generation result:", result);
+
+        return result;
+    }
 }
