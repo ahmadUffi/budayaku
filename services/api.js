@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'http://13.77.105.11:5151';
 
 export class ApiService {
     static async generateText(request) {
