@@ -1,7 +1,8 @@
 import Image from "next/image";
+import Card from "../Card";
 import membaca from "@/public/images/membaca.jpeg";
 import berbicara from "@/public/images/berbicara.jpeg";
-import Card from "@/app/components/Card";
+import createGambar from "@/public/images/createGambar.png";
 import Link from "next/link";
 
 export default function PilihanBelajar() {
@@ -12,14 +13,14 @@ export default function PilihanBelajar() {
       navigate: "/membaca",
     },
     {
-      judul: "Yuk belajaar sambil ngobrol langusng dengan saraswati",
-      image: berbicara,
-      navigate: "/berbicara",
+      judul: "yuk lihat versi kamu, saat jadi menggunakan baju adat",
+      image: createGambar,
+      navigate: "/membaca",
     },
     {
-      judul: "yuk lihat versi kamu, saat jadi menggunakan baju adat",
-      image: membaca,
-      navigate: "/membaca",
+      judul: "Yuk belajaar sambil ngobrol langusng dengan saraswati",
+      image: berbicara,
+      navigate: "/",
     },
   ];
 
@@ -36,7 +37,7 @@ export default function PilihanBelajar() {
   };
 
   return (
-    <div className="">
+    <div className="w-full">
       <h5
         className={`lg:text-4xl md:text-3xl text-2xl text-center mt-15`}
         style={threeDEffect}
@@ -46,20 +47,27 @@ export default function PilihanBelajar() {
       <p className="text-black text-center mt-4 font-bold text-lg">
         Pilih Metode Pembalajaran Yang Kamu Mau
       </p>
-      <div className="pilihan flex flex-wrap md:flex-nowrap mt-12">
-        {listPilihan.map((list, index) => (
-          <Link
-            key={index}
-            href={list.navigate}
-            className="w-full md:w-1/3 p-4"
-          >
+      <div className="pilihan bg-white gap-5 md:flex-nowrap flex-wrap flex flex-row w-full justify-center mt-12">
+        {listPilihan.map((list, index) =>
+          index != 2 ? (
+            <Link key={index} href={list.navigate} aria-disabled={true}>
+              <Card
+                id={index}
+                title={list.judul}
+                image={list.image}
+                description={list.desk}
+              />
+            </Link>
+          ) : (
             <Card
+              key={index}
+              id={index}
               title={list.judul}
               image={list.image}
               description={list.desk}
             />
-          </Link>
-        ))}
+          )
+        )}
       </div>
     </div>
   );

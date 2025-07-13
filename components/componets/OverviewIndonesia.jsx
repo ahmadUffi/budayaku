@@ -1,4 +1,3 @@
-import RenderThree from "@/app/components/RenderThree";
 import Section from "../Section";
 
 export default function OverviewIndonesia() {
