@@ -1,5 +1,3 @@
-const API_BASE_URL = "http://13.77.105.11:5151";
-
 export class ApiService {
   static async generateText(request) {
     console.log(API_BASE_URL);
