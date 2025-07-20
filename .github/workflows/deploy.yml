@@ -1,0 +1,53 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with: 
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd /home/ahmaduffi
+            echo "✅ Terhubung ke server"
+            APP_DIR="/home/ahmaduffi/budayaku"
+            if [ ! -d "$APP_DIR" ]; then
+              echo "📂 Direktori $APP_DIR tidak ditemukan, membuat direktori..."
+              mkdir -p $APP_DIR
+            fi
+            cd $APP_DIR
+            echo "PWD: ${pwd}"
+
+            if [ ! -d ".git" ]; then
+              git clone https://github.com/ahmadUffi/budayaku.git .
+            else
+              git pull
+            fi
+
+            echo "${{ secrets.ENV_CONTENT }}" > .env
+
+            if [ ! -f Dockerfile ]; then
+              echo "❌ Dockerfile tidak ditemukan, build dibatalkan."
+              exit 1
+            fi
+
+            echo "🛑 Menghapus container lama jika ada..."
+            docker stop budayaku 2>/dev/null || true
+            docker rm budayaku 2>/dev/null || true
+
+            echo "🐳 Membangun Docker image..."
+            docker build -t budayaku .
+            echo "🚀 Menjalankan container..."
+            docker run -d -p 3000:3000 --name budayaku budayaku
