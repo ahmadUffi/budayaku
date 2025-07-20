@@ -5,30 +5,24 @@ import { useEffect, useState } from "react";
 const getDevice = (width) => {
   if (width < 768) return "mobile";
   if (width < 1024) return "tablet";
-  return "dekstop";
+  return "desktop";
 };
 
 const useResponsive = () => {
-  // Initialize with default values, will be updated in useEffect
-  const [deviceName, setDeviceName] = useState("desktop");
-  const [deviceWidth, setDeviceWidth] = useState(1024);
+  const [deviceName, setDeviceName] = useState(null); // null dulu
+  const [deviceWidth, setDeviceWidth] = useState(null);
 
   useEffect(() => {
-    // Only access window after component is mounted on client side
     const handleResize = () => {
       setDeviceName(getDevice(window.innerWidth));
       setDeviceWidth(window.innerWidth);
     };
 
-    // Set initial values
-    handleResize();
-
-    // Add event listener
+    handleResize(); // Set nilai awal
     window.addEventListener("resize", handleResize);
 
-    // Clean up
     return () => window.removeEventListener("resize", handleResize);
-  }, []); // Add empty dependency array to run effect only once after mount
+  }, []);
 
   return { deviceName, deviceWidth };
 };

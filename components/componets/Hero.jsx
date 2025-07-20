@@ -9,16 +9,15 @@ export default function Hero({ className = "" }) {
   const [size, setSize] = useState(500);
 
   const { deviceName } = useResponsive();
-  console.log(deviceName);
 
   useEffect(() => {
+    if (!deviceName) return; // Jangan set apa pun sebelum hydration
+
     if (deviceName === "mobile") setSize(300);
     else if (deviceName === "tablet") setSize(700);
     else setSize(500);
   }, [deviceName]);
-
-  console.log(deviceName);
-
+  if (!deviceName) return;
   return (
     <div
       className=" lg:h-[100vh] sm:h-[100vh] md:h-max overflow-hidden bg-transparent lg:items-center bg-cover bg-center grid md:grid-cols-2 relative z-80 shadow-solid-red shadow-solid-blue"

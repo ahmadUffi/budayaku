@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import RenderThree from "../../components/RenderThree";
-import useResponsive from "@/hooks/useResponsive";
 import { ApiService } from "@/service/api";
 import ChatMessage from "../../components/ChatMessage";
 import ModelViewer from "../../components/ModelViewer";
@@ -20,8 +18,6 @@ export default function FloatChat({ provinsi }) {
   const [isSpeak, setIsSpeak] = useState(false);
 
   const messagesEndRef = useRef(null);
-
-  const { deviceWidth } = useResponsive();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
