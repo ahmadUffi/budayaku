@@ -93,7 +93,7 @@ const Literasi = ({ slug }) => {
                 />
               ) : (
                 <div className="relative">
-                  <div className="text-center relative top-20 text-[10px] md:text-[12px] text-gray-600 itali">
+                  <div className="text-center relative top-15 text-[10px] md:text-[12px] text-gray-600 italic">
                     Gambar 3D belum tersedia <br /> gambar3d tersedia di
                     provinsi {"{"}Bali - Jawa Tengah - Maluku - Sumatera Utara{" "}
                     {"}"}

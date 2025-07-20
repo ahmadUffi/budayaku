@@ -13,11 +13,19 @@ import { ApiService } from "@/service/api";
 export default function AnimatedListS(className) {
   const [selected, setSelected] = useState("");
   const [ListPorivinces, setDatas] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
-      const data = await ApiService.getAllDatas();
-      setDatas(data);
+      try {
+        setLoading(true); // mulai loading
+        const data = await ApiService.getAllDatas();
+        setDatas(data);
+      } catch (error) {
+        console.error("Gagal mengambil data:", error);
+      } finally {
+        setLoading(false); // selesai loading
+      }
     };
 
     getData();
@@ -80,13 +88,22 @@ export default function AnimatedListS(className) {
       </div>
       <div className="">
         <div className="flex flex-wrap gap-7 justify-center">
-          {list.map((list, index) => (
-            <BlurFade key={index} delay={0.25 + index * 0.05} inView>
-              <Link href={`/membaca/${list.slug}`}>
-                <CardGambar title={list.nama_provinsi} image={list.url_image} />
-              </Link>
-            </BlurFade>
-          ))}
+          {loading ? (
+            <p className="text-gray-500 italic">
+              Sedang memuat data provinsi...
+            </p>
+          ) : (
+            list.map((list, index) => (
+              <BlurFade key={index} delay={0.25 + index * 0.05} inView>
+                <Link href={`/membaca/${list.slug}`}>
+                  <CardGambar
+                    title={list.nama_provinsi}
+                    image={list.url_image}
+                  />
+                </Link>
+              </BlurFade>
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -60,7 +60,7 @@ export default function Hero({ className = "" }) {
       console.error("Audio gagal diputar:", e);
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 2500));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     smoothScrollTo("start", 15000);
   };
   return (
