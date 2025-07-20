@@ -54,6 +54,7 @@ export default function Province() {
     return (
       <Link href={`/membaca/${slug}`}>
         <div
+          id="province"
           key={id}
           className={`w-max h-max bg-white text-gray-800 cursor-pointer py-3 px-6 rounded-sm
           shadow-[0_4px_0_#e5e7eb] border border-gray-200 

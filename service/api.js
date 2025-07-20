@@ -74,7 +74,6 @@ export class ApiService {
       throw new Error("Failed to generate image");
     }
     const result = await response.json();
-    console.log("Image from image+province generation result:", result);
 
     return result;
   }

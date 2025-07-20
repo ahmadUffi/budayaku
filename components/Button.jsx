@@ -9,7 +9,6 @@ export default function Button({
   onclick,
   selected,
 }) {
-  console.log("Button clicked with value:", selected);
   return (
     <button
       className={cn(

@@ -8,7 +8,7 @@ export default function Footer() {
     setDate(new Date().toLocaleString());
   }, []);
   return (
-    <footer className="  text-gray-700 py-8 mt-12 border-t">
+    <footer id="footer" className="  text-gray-700 py-8 mt-12 border-t">
       <div className=" justify-center max-w-6xl mx-auto px-4 grid grid-cols-1  gap-8">
         <div>
           <h2 className="text-xl font-bold mb-2 text-center">Budayaku.id</h2>

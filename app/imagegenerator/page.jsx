@@ -1,11 +1,9 @@
 "use client";
-
 import React, { useRef, useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import logo from "@/public/images/logo.png";
 import {
   Command,
   CommandEmpty,
@@ -73,6 +71,7 @@ export default function ImageGenerator() {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
+  const audio = new Audio("/sounds/gosok.mp3");
 
   useEffect(() => {
     const mapped = provinsiIndonesia.map((prov) => ({
@@ -83,12 +82,12 @@ export default function ImageGenerator() {
   }, []);
 
   const handleImageChange = (e) => {
-    const maxSize = 5 * 1024 * 1024;
+    const maxSize = 4 * 1024 * 1024;
     const file = e.target.files[0];
 
     if (file) {
       if (file.size > maxSize) {
-        setErrorSize("Ukuran gambar tidak boleh lebih dari 5 MB.");
+        setErrorSize("Ukuran gambar tidak boleh lebih dari 4.4 MB.");
         setImage(null);
         setPreview(null);
         return;
@@ -133,6 +132,7 @@ export default function ImageGenerator() {
 
       if (response && response.image_base64) {
         setResult(response.image_base64);
+        audio.play().catch((e) => console.error("Audio gagal diputar:", e));
       } else {
         setError("Gagal menerima gambar dari server.");
       }
@@ -279,7 +279,7 @@ export default function ImageGenerator() {
                   disabled={loading}
                   className="mt-4 w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition disabled:opacity-50"
                 >
-                  {loading ? "Menghasilkan..." : "Kirim & Generate"}
+                  {loading ? "Tunggu Yahh..." : "Kirim & Generate"}
                 </button>
               </form>
             </div>

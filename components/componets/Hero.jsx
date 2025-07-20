@@ -4,11 +4,44 @@ import ModelViewer from "../ModelViewer";
 import useResponsive from "../../hooks/useResponsive";
 import { useState, useEffect } from "react";
 import Button from "../Button";
+import { WordRotate } from "../magicui/word-rotate";
 
 export default function Hero({ className = "" }) {
   const [size, setSize] = useState(500);
+  const [isGo, setIsgo] = useState(false);
 
   const { deviceName } = useResponsive();
+
+  const smoothScrollTo = (targetId, duration = 10000) => {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    const targetPosition =
+      target.getBoundingClientRect().top + window.pageYOffset;
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
+
+    const animation = (currentTime) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+
+      const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+      window.scrollTo(0, run);
+
+      if (timeElapsed < duration) requestAnimationFrame(animation);
+    };
+
+    // Easing function for smooth effect
+    const easeInOutQuad = (t, b, c, d) => {
+      t /= d / 2;
+      if (t < 1) return (c / 2) * t * t + b;
+      t--;
+      return (-c / 2) * (t * (t - 2) - 1) + b;
+    };
+
+    requestAnimationFrame(animation);
+  };
 
   useEffect(() => {
     if (!deviceName) return; // Jangan set apa pun sebelum hydration
@@ -19,27 +52,16 @@ export default function Hero({ className = "" }) {
   }, [deviceName]);
   if (!deviceName) return;
 
-  const threeDEffect = {
-    color: "rgb(156, 71, 18)",
-    fontWeight: "900",
-    textShadow: `
-    0.0075em 0.0075em 0 rgba(156, 71, 18, 0.1),
-    0.005em 0.005em 0 rgba(156, 71, 18, 0.2),
-    0.01em 0.01em 0 rgba(156, 71, 18, 0.3),
-    0.015em 0.015em 0 rgba(156, 71, 18, 0.4),
-    0.02em 0.02em 0 rgba(156, 71, 18, 0.5),
-  `,
-  };
-
-  const mulaiBelajar = () => {
-    // Scroll ke target
-    if (belajarRef.current) {
-      belajarRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-
+  const handleclick = async () => {
+    setIsgo(true);
     // Play audio
-    const audio = new Audio("/suara.mp3");
-    audio.play().catch((err) => console.error(err));
+    const audio = new Audio("/sounds/opening.mp3"); // letakkan file di public/sounds
+    audio.play().catch((e) => {
+      console.error("Audio gagal diputar:", e);
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 2500));
+    smoothScrollTo("start", 15000);
   };
   return (
     <div
@@ -48,13 +70,20 @@ export default function Hero({ className = "" }) {
     >
       <div className="title order-2 md:order-1 px-6 lg:pl-35 py-16 flex flex-col gap-8 relative z-40">
         <div className="text space-y-4">
-          <h2
-            style={threeDEffect}
-            className="text-xl sm:text-2xl md:text-3xl font-bold text-black leading-snug"
-          >
+          <h2 className=" text-xl sm:text-2xl md:text-3xl font-bold text-black leading-snug">
             Hidupkan Kembali Budaya Indonesia <br className="hidden md:block" />{" "}
-            Lewat Dunia Digital
           </h2>
+          <div className="flex items-center gap-3  text-xl sm:text-2xl md:text-3xl font-bold -mt-3  text-black">
+            Lewat
+            <WordRotate
+              className=" text-[#9c4712] dark:text-white"
+              words={[
+                "Dunia Digital",
+                "3D Interaktif",
+                "Artificial Intelegance",
+              ]}
+            />
+          </div>
           <p className="text-sm sm:text-base md:text-lg text-black leading-relaxed max-w-xl">
             <strong>Bukan cuma dilihat, tapi dirasakan.</strong>
             <br />
@@ -65,7 +94,7 @@ export default function Hero({ className = "" }) {
           </p>
         </div>
         <div className="pt-4">
-          <Button onclick={mulaiBelajar} className="animate-bounce rounded-sm">
+          <Button onclick={handleclick} className="animate-bounce rounded-sm">
             🚀 Pergi Belajar
           </Button>
         </div>
@@ -79,7 +108,8 @@ export default function Hero({ className = "" }) {
           cameraOrbit="0deg 80deg 9m"
           cameraTarget="0m 2m 0m"
           alt="My 3D Object"
-          isSpeak={true}
+          isSpeak={isGo}
+          cameraControls={false}
         />
       </div>
 

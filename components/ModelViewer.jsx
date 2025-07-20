@@ -12,7 +12,7 @@ export default function ModelViewer({
   cameraTarget = "0m 1m 0m",
   isSpeak = false, // << kontrol animasi dari sini
   animationName = "Armature|mixamo.com|Layer0",
-  ar = true,
+  ar = false,
   autoplay = false,
   cameraControls = true,
 }) {
