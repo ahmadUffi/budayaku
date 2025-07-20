@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function PilihanBelajar() {
   const listPilihan = [
     {
-      judul: "Yuk belajaar dengan membaca sambil berdiskusi dengan Saraswati",
+      judul: "Yuk belajar dengan membaca sambil berdiskusi dengan Saraswati",
       image: membaca,
       navigate: "/membaca",
     },
