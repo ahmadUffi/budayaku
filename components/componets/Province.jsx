@@ -64,7 +64,7 @@ export default function Province() {
           }`}
         >
           <div className="flex size-12 items-center justify-center rounded-full overflow-hidden mr-2">
-            <Image src={image} width={100} height={100} alt={name} />
+            <img src={image} width={100} height={100} alt={name} />
           </div>
           <div className="title">{name}</div>
         </div>
