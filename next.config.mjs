@@ -1,8 +1,16 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
   env: {
     NEXT_API_BASE_URL: process.env.NEXT_API_BASE_URL,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "rkcqzelkfoaxcvughcts.supabase.co",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

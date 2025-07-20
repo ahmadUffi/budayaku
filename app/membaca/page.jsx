@@ -61,7 +61,7 @@ export default function AnimatedListS(className) {
           {list.map((list, index) => (
             <BlurFade key={index} delay={0.25 + index * 0.05} inView>
               <Link href={`/membaca/${list.slug}`}>
-                <Card title={list.nama_provinsi} image={logo} />
+                <Card title={list.nama_provinsi} image={list.url_image} />
               </Link>
             </BlurFade>
           ))}

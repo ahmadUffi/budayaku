@@ -50,6 +50,8 @@ export default function Province() {
   const Card = ({ id, province }) => {
     const name = province.nama_provinsi;
     const slug = province.slug;
+    const image = province.url_image;
+    console.log(province);
     return (
       <Link href={`/membaca/${slug}`}>
         <div
@@ -62,7 +64,7 @@ export default function Province() {
           }`}
         >
           <div className="flex size-12 items-center justify-center rounded-full overflow-hidden mr-2">
-            <Image src={logo} width={100} height={100} alt={name} />
+            <Image src={image} width={100} height={100} alt={name} />
           </div>
           <div className="title">{name}</div>
         </div>
