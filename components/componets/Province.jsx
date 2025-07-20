@@ -13,16 +13,23 @@ import Link from "next/link";
 export default function Province() {
   const [selected, setSelected] = useState("");
   const [provinces, setProvince] = useState([]);
+  const [loading, setLoading] = useState(true); // loading state
 
   useEffect(() => {
     const getData = async () => {
-      const data = await ApiService.getAllDatas();
-      setProvince(data);
+      try {
+        setLoading(true); // mulai loading
+        const data = await ApiService.getAllDatas();
+        setProvince(data);
+      } catch (error) {
+        console.error("Gagal mengambil data provinsi:", error);
+      } finally {
+        setLoading(false); // selesai loading
+      }
     };
+
     getData();
   }, []);
-
-  console.log(provinces);
 
   const isMatch = (name) =>
     selected && name.toLowerCase().includes(selected.toLowerCase());
@@ -98,18 +105,22 @@ export default function Province() {
         </div>
       </div>
       <div className="flex flex-col gap-6 overflow-hidden">
-        {rows.map((row, idx) => (
-          <Marquee
-            key={idx}
-            reverse={idx % 2 !== 0}
-            pauseOnHover
-            className="[--duration:45s]"
-          >
-            {row.map((province) => (
-              <Card key={province.id} id={province.id} province={province} />
-            ))}
-          </Marquee>
-        ))}
+        {loading ? (
+          <p className="text-gray-500 italic">Sedang memuat data provinsi...</p>
+        ) : (
+          rows.map((row, idx) => (
+            <Marquee
+              key={idx}
+              reverse={idx % 2 !== 0}
+              pauseOnHover
+              className="[--duration:45s]"
+            >
+              {row.map((province) => (
+                <Card key={province.id} id={province.id} province={province} />
+              ))}
+            </Marquee>
+          ))
+        )}
       </div>
     </div>
   );
