@@ -92,8 +92,19 @@ const Literasi = ({ slug }) => {
                   alt="3D Object"
                 />
               ) : (
-                <div className="text-center text-gray-600 italic">
-                  Gambar 3D belum tersedia
+                <div className="relative">
+                  <div className="text-center relative top-20 text-[10px] md:text-[12px] text-gray-600 itali">
+                    Gambar 3D belum tersedia <br /> gambar3d tersedia di
+                    provinsi {"{"}Bali - Jawa Tengah - Maluku - Sumatera Utara{" "}
+                    {"}"}
+                  </div>
+                  <ModelViewer
+                    src={"../ui/petaIndonesia.glb"}
+                    width={deviceName == "mobile" ? "90vw" : "600px"}
+                    height={deviceName == "mobile" ? "250px" : "450px"}
+                    cameraOrbit="90deg 75deg 0"
+                    alt="3D Object"
+                  />
                 </div>
               )}
             </div>

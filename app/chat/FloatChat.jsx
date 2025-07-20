@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ApiService } from "@/service/api";
 import ChatMessage from "../../components/ChatMessage";
 import ModelViewer from "../../components/ModelViewer";
+import { SpinningText } from "@/components/magicui/spinning-text";
 
 export default function FloatChat({ provinsi }) {
   const [isActive, setIsActive] = useState(false);
@@ -205,16 +206,30 @@ export default function FloatChat({ provinsi }) {
         }`}
       >
         {!isActive ? (
-          <model-viewer
-            src="/ui/profile.glb"
-            width="30%"
-            height="220px"
-            camera-orbit="-30deg 90deg -10m"
-            camera-target="1.2m 3.1m -2m"
-            autoplay={true}
-            instruction-prompt="none"
-            field-of-view="20deg"
-          />
+          <div className="bg-amber-100">
+            {/* <SpinningText
+              radius={4}
+              duration={0}
+              className="text-[16px] absolute left-[50%] translate-x-[50%] top-[50%] translate-y-[-50%]"
+            >
+              Hallo•Sarasati•DI•Sini•
+            </SpinningText> */}
+            <div className="absolute shadow -top-5 z-90 left-[10%] translate-x-[-50%] not-last:text-sm py-1  px-3">
+              Hallo
+            </div>
+            <div className="relative z-10">
+              <model-viewer
+                src="/ui/profile.glb"
+                width="30%"
+                height="220px"
+                camera-orbit="-30deg 90deg -10m"
+                camera-target="1.2m 3.1m -2m"
+                autoplay={true}
+                instruction-prompt="none"
+                field-of-view="20deg"
+              />
+            </div>
+          </div>
         ) : (
           <>
             <div className="p-2 text-right bg-gray-100 border-b border-gray-300">
@@ -231,6 +246,7 @@ export default function FloatChat({ provinsi }) {
                 width="100%"
                 height="220px"
                 cameraOrbit="-15deg 75deg 6m"
+                cameraControls={false}
                 cameraTarget="0m 3m 0m"
                 isSpeak={isSpeak}
               />

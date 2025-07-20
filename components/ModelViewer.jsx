@@ -14,6 +14,7 @@ export default function ModelViewer({
   animationName = "Armature|mixamo.com|Layer0",
   ar = true,
   autoplay = false,
+  cameraControls = true,
 }) {
   const modelRef = useRef(null);
   const { deviceName } = useResponsive();
@@ -66,8 +67,7 @@ export default function ModelViewer({
       autoplay={animationName ? true : false}
       loop
       environment-image="neutral"
-      interaction-prompt="none"
-      camera-controls
+      camera-controls={cameraControls}
       ar={ar}
       camera-orbit={cameraOrbit}
       camera-target={cameraTarget}
