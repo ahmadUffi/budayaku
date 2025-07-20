@@ -18,6 +18,29 @@ export default function Hero({ className = "" }) {
     else setSize(500);
   }, [deviceName]);
   if (!deviceName) return;
+
+  const threeDEffect = {
+    color: "rgb(156, 71, 18)",
+    fontWeight: "900",
+    textShadow: `
+    0.0075em 0.0075em 0 rgba(156, 71, 18, 0.1),
+    0.005em 0.005em 0 rgba(156, 71, 18, 0.2),
+    0.01em 0.01em 0 rgba(156, 71, 18, 0.3),
+    0.015em 0.015em 0 rgba(156, 71, 18, 0.4),
+    0.02em 0.02em 0 rgba(156, 71, 18, 0.5),
+  `,
+  };
+
+  const mulaiBelajar = () => {
+    // Scroll ke target
+    if (belajarRef.current) {
+      belajarRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Play audio
+    const audio = new Audio("/suara.mp3");
+    audio.play().catch((err) => console.error(err));
+  };
   return (
     <div
       className=" lg:h-[100vh] sm:h-[100vh] md:h-max overflow-hidden bg-transparent lg:items-center bg-cover bg-center grid md:grid-cols-2 relative z-80 shadow-solid-red shadow-solid-blue"
@@ -25,7 +48,10 @@ export default function Hero({ className = "" }) {
     >
       <div className="title order-2 md:order-1 px-6 lg:pl-35 py-16 flex flex-col gap-8 relative z-40">
         <div className="text space-y-4">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-black leading-snug">
+          <h2
+            style={threeDEffect}
+            className="text-xl sm:text-2xl md:text-3xl font-bold text-black leading-snug"
+          >
             Hidupkan Kembali Budaya Indonesia <br className="hidden md:block" />{" "}
             Lewat Dunia Digital
           </h2>
@@ -39,7 +65,7 @@ export default function Hero({ className = "" }) {
           </p>
         </div>
         <div className="pt-4">
-          <Button className={"animate-bounce rounded-sm "}>
+          <Button onclick={mulaiBelajar} className="animate-bounce rounded-sm">
             🚀 Pergi Belajar
           </Button>
         </div>

@@ -37,7 +37,7 @@ export default function PilihanBelajar() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full " id="start">
       <h5
         className={`lg:text-4xl md:text-3xl text-2xl text-center mt-15`}
         style={threeDEffect}
