@@ -71,7 +71,6 @@ export default function ImageGenerator() {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState([]);
-  const audio = new Audio("/sounds/gosok.mp3");
 
   useEffect(() => {
     const mapped = provinsiIndonesia.map((prov) => ({
@@ -132,7 +131,12 @@ export default function ImageGenerator() {
 
       if (response && response.image_base64) {
         setResult(response.image_base64);
-        audio.play().catch((e) => console.error("Audio gagal diputar:", e));
+        if (typeof window !== "undefined") {
+          const audio = new Audio("/sounds/gosok.mp3");
+          audio.play().catch((err) => {
+            console.error("Gagal play audio:", err);
+          });
+        }
       } else {
         setError("Gagal menerima gambar dari server.");
       }
