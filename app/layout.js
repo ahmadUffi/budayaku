@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
@@ -21,10 +22,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <script
+        <Script
           type="module"
           src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
-        ></script>
+          strategy="beforeInteractive" // 👈 penting supaya dipasang sebelum interaktif
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
