@@ -7,7 +7,7 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "rkcqzelkfoaxcvughcts.supabase.co",
-        pathname: "/**",
+        pathname: "/storage/v1/object/public/gambarprovinsi/**",
       },
     ],
   },
