@@ -1,7 +1,7 @@
 export class ApiService {
   static async generateText(request) {
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/chat/generate-text`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/generate-text`,
       {
         method: "POST",
         headers: {
@@ -22,7 +22,7 @@ export class ApiService {
     console.log("Requesting audio for text:", request.text);
 
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/chat/generate-audio`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/generate-audio`,
       {
         method: "POST",
         headers: {
@@ -55,7 +55,7 @@ export class ApiService {
   }
   static async generateImageFromTextAndImage({ image_base64, province }) {
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/chat/generate-image-from-text-and-image`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/generate-image-from-text-and-image`,
       {
         method: "POST",
         headers: {
@@ -82,7 +82,7 @@ export class ApiService {
     console.log("Requesting image generation for prompt:", request.prompt);
 
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/chat/generate-image`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/chat/generate-image`,
       {
         method: "POST",
         headers: {
@@ -107,9 +107,12 @@ export class ApiService {
     return result;
   }
   static async getAllDatas() {
-    const response = await fetch(`${process.env.NEXT_API_BASE_URL}/budaya`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/budaya`,
+      {
+        method: "GET",
+      }
+    );
 
     if (!response.ok) {
       console.log(await response.text());
@@ -121,13 +124,13 @@ export class ApiService {
 
   static async getDataBySlug(slug) {
     const response = await fetch(
-      `${process.env.NEXT_API_BASE_URL}/budaya/${slug}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/budaya/${slug}`,
       {
         method: "GET",
       }
     );
 
-    console.log(`${process.env.NEXT_API_BASE_URL}/budaya/${slug}`);
+    console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}/budaya/${slug}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch data");
