@@ -54,6 +54,7 @@ export default function Hero({ className = "" }) {
           cameraOrbit="0deg 80deg 9m"
           cameraTarget="0m 2m 0m"
           alt="My 3D Object"
+          isSpeak={true}
         />
       </div>
 

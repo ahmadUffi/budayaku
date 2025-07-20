@@ -1,13 +1,15 @@
 export class ApiService {
   static async generateText(request) {
-    console.log(API_BASE_URL);
-    const response = await fetch(`${API_BASE_URL}/chat/generate-text`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_API_BASE_URL}/chat/generate-text`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to generate text");
@@ -19,16 +21,19 @@ export class ApiService {
   static async generateAudio(request) {
     console.log("Requesting audio for text:", request.text);
 
-    const response = await fetch(`${API_BASE_URL}/chat/generate-audio`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: request.text,
-        voice: request.voice || "Despina",
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_API_BASE_URL}/chat/generate-audio`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: request.text,
+          voice: request.voice || "Despina",
+        }),
+      }
+    );
 
     if (!response.ok) {
       const text = await response.text();
@@ -48,20 +53,47 @@ export class ApiService {
 
     return blob;
   }
+  static async generateImageFromTextAndImage({ image_base64, province }) {
+    const response = await fetch(
+      `${process.env.NEXT_API_BASE_URL}/chat/generate-image-from-text-and-image`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          image_base64,
+          province,
+        }),
+      }
+    );
 
+    if (!response.ok) {
+      const text = await response.text();
+      console.error("Image API Error:", text);
+      throw new Error("Failed to generate image");
+    }
+    const result = await response.json();
+    console.log("Image from image+province generation result:", result);
+
+    return result;
+  }
   static async generateImage(request) {
     console.log("Requesting image generation for prompt:", request.prompt);
 
-    const response = await fetch(`${API_BASE_URL}/chat/generate-image`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt: request.prompt,
-        province: request.province,
-      }),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_API_BASE_URL}/chat/generate-image`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: request.prompt,
+          province: request.province,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const text = await response.text();
@@ -75,7 +107,7 @@ export class ApiService {
     return result;
   }
   static async getAllDatas() {
-    const response = await fetch(`${API_BASE_URL}/budaya`, {
+    const response = await fetch(`${process.env.NEXT_API_BASE_URL}/budaya`, {
       method: "GET",
     });
 
@@ -84,20 +116,23 @@ export class ApiService {
       throw new Error("Failed to fetch data");
     }
 
-    return response.json();
+    return await response.json();
   }
 
   static async getDataBySlug(slug) {
-    const response = await fetch(`${API_BASE_URL}/budaya/${slug}`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.NEXT_API_BASE_URL}/budaya/${slug}`,
+      {
+        method: "GET",
+      }
+    );
 
-    console.log(`${API_BASE_URL}/budaya/${slug}`);
+    console.log(`${process.env.NEXT_API_BASE_URL}/budaya/${slug}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
 
-    return response.json();
+    return await response.json();
   }
 }

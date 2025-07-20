@@ -17,6 +17,7 @@ export default function FloatChat({ provinsi }) {
   const [audioLoading, setAudioLoading] = useState(false);
   const audioRef = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [isSpeak, setIsSpeak] = useState(false);
 
   const messagesEndRef = useRef(null);
 
@@ -137,16 +138,10 @@ export default function FloatChat({ provinsi }) {
           audioRef.current.currentTime = 0;
         }
 
-        console.log(
-          "Generating audio for text:",
-          text.substring(0, 50) + "..."
-        );
         const audioBlob = await ApiService.generateAudio({ text });
         setMessages((prev) => [...prev, response]);
 
-        if (audioBlob.size === 0) {
-          throw new Error("Audio blob is empty");
-        }
+        if (audioBlob.size === 0) throw new Error("Audio blob is empty");
 
         const audioUrl = URL.createObjectURL(audioBlob);
         console.log("Audio URL created:", audioUrl);
@@ -154,10 +149,14 @@ export default function FloatChat({ provinsi }) {
         if (audioRef.current) {
           audioRef.current.src = audioUrl;
 
+          // ⬇️ isSpeak TRUE saat audio siap
+          setIsSpeak(true);
+
           audioRef.current.onended = () => {
             console.log("Audio playback ended");
             setPlayingAudioId(null);
             setAudioLoading(false);
+            setIsSpeak(false); // ⬅️ isSpeak FALSE saat audio selesai
             URL.revokeObjectURL(audioUrl);
             resolve();
           };
@@ -171,18 +170,13 @@ export default function FloatChat({ provinsi }) {
             console.error("Audio error:", e);
             setPlayingAudioId(null);
             setAudioLoading(false);
+            setIsSpeak(false);
             URL.revokeObjectURL(audioUrl);
             reject(e);
           };
 
-          try {
-            audioRef.current.play();
-
-            console.log("Audio started playing");
-          } catch (playError) {
-            console.error("Play error:", playError);
-            reject(playError);
-          }
+          await audioRef.current.play();
+          console.log("Audio started playing");
         } else {
           throw new Error("Audio ref not available");
         }
@@ -190,6 +184,7 @@ export default function FloatChat({ provinsi }) {
         console.error("Error playing audio:", error);
         setPlayingAudioId(null);
         setAudioLoading(false);
+        setIsSpeak(false);
         alert("Gagal memutar audio. Silakan coba lagi.");
         reject(error);
       }
@@ -203,7 +198,7 @@ export default function FloatChat({ provinsi }) {
   const squareStyle =
     "w-[350px] md:w-[400px] h-[85vh] bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col border border-gray-300";
   const circleStyle =
-    "w-[65px] h-[65px] rounded-full bg-white border border-gray-300 shadow-xl flex items-center justify-center text-2xl cursor-pointer hover:scale-105 transition-transform duration-200";
+    "w-[75px] overflow-hidden h-[75px] rounded-full bg-white border border-gray-300 shadow-xl flex items-center justify-center text-2xl cursor-pointer hover:scale-105 transition-all duration-200";
 
   return (
     <div className="fixed bottom-6 right-4 z-50 font-sans">
@@ -214,7 +209,16 @@ export default function FloatChat({ provinsi }) {
         }`}
       >
         {!isActive ? (
-          "💬"
+          <model-viewer
+            src="/ui/profile.glb"
+            width="30%"
+            height="220px"
+            camera-orbit="-30deg 90deg -10m"
+            camera-target="1.2m 3.1m -2m"
+            autoplay={true}
+            instruction-prompt="none"
+            field-of-view="20deg"
+          />
         ) : (
           <>
             <div className="p-2 text-right bg-gray-100 border-b border-gray-300">
@@ -225,13 +229,14 @@ export default function FloatChat({ provinsi }) {
                 ❌
               </button>
             </div>
-            <div className="flex justify-center items-center h-[200px] bg-gradient-to-b from-white via-gray-50 to-transparent">
+            <div className="bg-white m-auto mt-3 shadow h-[100px] w-[100px] flex justify-center items-center rounded-full overflow-hidden bg-gradient-to-b from-white via-gray-50 to-transparent">
               <ModelViewer
-                src="/ui/maskotwelcome.glb"
+                src="/ui/profile-chat.glb"
                 width="100%"
                 height="220px"
-                cameraOrbit="0deg 75deg 6m"
-                cameraTarget="0m 2.3m 0m"
+                cameraOrbit="-15deg 75deg 6m"
+                cameraTarget="0m 3m 0m"
+                isSpeak={isSpeak}
               />
             </div>
             <div className="flex-1  overflow-y-auto p-4 space-y-3 bg-white">

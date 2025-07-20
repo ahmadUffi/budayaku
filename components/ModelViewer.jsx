@@ -1,29 +1,73 @@
-// components/ModelViewer.jsx
-"use client"; // <== WAJIB karena Web Component tidak bisa SSR
+"use client";
 
+import React, { useEffect, useRef } from "react";
 import useResponsive from "../hooks/useResponsive";
-import React from "react";
-// import "@google/model-viewer";
 
 export default function ModelViewer({
-  src = "/models/my-model.glb",
+  src = "",
   alt = "3D model",
   width = "100%",
   height = "500px",
-  autoRotate = true,
-  cameraOrbit = "45deg 75de 0deg",
+  cameraOrbit = "45deg 75deg 0deg",
   cameraTarget = "0m 1m 0m",
-
+  isSpeak = false, // << kontrol animasi dari sini
+  animationName = "Armature|mixamo.com|Layer0",
   ar = true,
+  autoplay = false,
 }) {
+  const modelRef = useRef(null);
   const { deviceName } = useResponsive();
+
+  useEffect(() => {
+    const model = modelRef.current;
+    if (!model) return;
+
+    const handleLoad = () => {
+      console.log("Animations:", model.availableAnimations);
+
+      // Set animasi sesuai prop
+      model.animationName = animationName;
+
+      if (isSpeak) {
+        model.play();
+      } else {
+        model.pause();
+      }
+    };
+
+    // Jalankan saat model load
+    model.addEventListener("load", handleLoad);
+
+    return () => {
+      model.removeEventListener("load", handleLoad);
+    };
+  }, [animationName]);
+
+  useEffect(() => {
+    const model = modelRef.current;
+    if (!model) return;
+
+    // Set animasi aktif terus
+    model.animationName = animationName;
+
+    // Play/pause berdasarkan isSpeak
+    if (isSpeak) {
+      model.play();
+    } else {
+      model.pause();
+    }
+  }, [isSpeak, animationName]);
+
   return (
     <model-viewer
+      ref={modelRef}
       src={src}
       alt={alt}
-      autoplay
-      // auto-rotate={autoRotate}
-      camera-controls={true}
+      autoplay={animationName ? true : false}
+      loop
+      environment-image="neutral"
+      interaction-prompt="none"
+      camera-controls
       ar={ar}
       camera-orbit={cameraOrbit}
       camera-target={cameraTarget}
@@ -33,5 +77,4 @@ export default function ModelViewer({
   );
 }
 
-// camera-orbit="0deg 80deg 9m"
-// camera-target="0m 2m 0m"
+// instruction-prompt="none"

@@ -15,7 +15,7 @@ export default function PilihanBelajar() {
     {
       judul: "yuk lihat versi kamu, saat jadi menggunakan baju adat",
       image: createGambar,
-      navigate: "/membaca",
+      navigate: "/imagegenerator",
     },
     {
       judul: "Yuk belajaar sambil ngobrol langusng dengan saraswati",

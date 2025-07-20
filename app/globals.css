@@ -91,7 +91,7 @@
 
 body {
   overflow-x: hidden;
-  background-color: #fffffb;
+  background-color: #fffbfb;
 }
 
 @font-face {
@@ -257,4 +257,8 @@ body {
 
 .overvlow-scrollbar-none::-webkit-scrollbar {
   display: none;
+}
+
+modal-viewer {
+  --poster-color: transparant;
 }
