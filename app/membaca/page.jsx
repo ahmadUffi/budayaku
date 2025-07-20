@@ -4,7 +4,6 @@ import logo from "@/public/images/logo.png";
 import { Input } from "@/components/ui/input";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { useEffect, useState } from "react";
-import Card from "../../components/Card";
 import Link from "next/link";
 import { BlurFade } from "@/components/magicui/blur-fade";
 import mainbg from "@/public/images/bg-color.png";
@@ -24,7 +23,30 @@ export default function AnimatedListS(className) {
     getData();
   }, []);
 
-  console.log(ListPorivinces);
+  const CardGambar = ({ title, image }) => {
+    return (
+      <div
+        className={`
+        
+         relative z-10 cursor-pointer min-w-[230px] w-[250px] max-w-[280px]  h-2xl bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden transform transition duration-500`}
+      >
+        <img
+          src={image}
+          width={100}
+          height={100}
+          alt={title}
+          className="w-full h-53 object-cover relative"
+        />
+
+        {/* Overlay Gradient + Text */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 px-4 py-3 bg-gradient-to-t from-black/70 to-transparent text-white">
+          <h3 className="text-base font-bold leading-tight drop-shadow-sm">
+            {title}
+          </h3>
+        </div>
+      </div>
+    );
+  };
 
   const list = ListPorivinces.filter((list) =>
     list.nama_provinsi.toLowerCase().includes(selected.toLowerCase())
@@ -61,7 +83,7 @@ export default function AnimatedListS(className) {
           {list.map((list, index) => (
             <BlurFade key={index} delay={0.25 + index * 0.05} inView>
               <Link href={`/membaca/${list.slug}`}>
-                <Card title={list.nama_provinsi} image={list.url_image} />
+                <CardGambar title={list.nama_provinsi} image={list.url_image} />
               </Link>
             </BlurFade>
           ))}
