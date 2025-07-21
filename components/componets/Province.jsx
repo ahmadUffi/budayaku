@@ -92,7 +92,7 @@ export default function Province() {
             className=" mt-2 lg:text-4xl md:text-3xl text-2xl mb-5 "
             style={threed}
           >
-            38 Provinsi Yang Ads Di Indonesia
+            38 Provinsi Yang Ada Di Indonesia
           </h5>
         </SparklesText>
         <div className="flex w-full max-w-sm items-center gap-2">

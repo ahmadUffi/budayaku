@@ -72,7 +72,7 @@ export default function AnimatedListS(className) {
       <div className="p-2 md:p-10 mt-10 text-blue-500 flex flex-col justify-center items-center mb-5 flex-wrap">
         <SparklesText>
           <h5 className=" mt-2 lg:text-4xl md:text-3xl text-2xl mb-5 text-center">
-            38 Provinsi Yang Ads Di Indonesia
+            38 Provinsi Yang Ada Di Indonesia
           </h5>
         </SparklesText>
 
