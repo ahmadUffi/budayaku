@@ -11,13 +11,10 @@ import ButtonLink from "@/components/ButtonLink";
 const Literasi = ({ slug }) => {
   const [datas, setDatas] = useState({});
 
-  console.log("data", slug);
   useEffect(() => {
     const getData = async () => {
       try {
-        console.log("Fetching for slug:", slug);
         const data = await ApiService.getDataBySlug(slug);
-        console.log("Fetched data:", data);
         setDatas(data);
       } catch (err) {
         console.error("Failed to fetch data", err);

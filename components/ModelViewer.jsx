@@ -24,8 +24,6 @@ export default function ModelViewer({
     if (!model) return;
 
     const handleLoad = () => {
-      console.log("Animations:", model.availableAnimations);
-
       // Set animasi sesuai prop
       model.animationName = animationName;
 

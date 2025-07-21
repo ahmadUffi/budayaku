@@ -39,9 +39,7 @@ export default function FloatChat({ provinsi }) {
         setAudioLoading(false);
       };
 
-      audioRef.current.onloadeddata = () => {
-        console.log("Audio loaded, duration:", audioRef.current.duration);
-      };
+      audioRef.current.onloadeddata = () => {};
     }
   }, []);
 

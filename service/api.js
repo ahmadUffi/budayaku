@@ -129,8 +129,6 @@ export class ApiService {
       }
     );
 
-    console.log(`${process.env.NEXT_PUBLIC_API_BASE_URL}/budaya/${slug}`);
-
     if (!response.ok) {
       throw new Error("Failed to fetch data");
     }
