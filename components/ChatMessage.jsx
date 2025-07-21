@@ -34,7 +34,7 @@ const ChatMessage = ({
             <p className="flex-1">{message}</p>
           )}
 
-          {!isUser && onPlayAudio && (
+          {/* {!isUser && onPlayAudio && (
             <button
               onClick={handlePlayAudio}
               disabled={isLoadingAudio}
@@ -66,7 +66,7 @@ const ChatMessage = ({
                 </svg>
               )}
             </button>
-          )}
+          )} */}
         </div>
       </div>
     </div>
