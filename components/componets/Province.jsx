@@ -4,8 +4,6 @@ import { Marquee } from "../magicui/marquee";
 import { ShineBorder } from "../magicui/shine-border";
 import { SparklesText } from "../magicui/sparkles-text";
 import { Input } from "../ui/input";
-import Image from "next/image";
-import logo from "@/public/images/logo.png";
 import { useEffect, useState } from "react";
 import { ApiService } from "@/service/api";
 import Link from "next/link";

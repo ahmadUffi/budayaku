@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Card from "../Card";
 import membaca from "@/public/images/membaca.jpeg";
 import berbicara from "@/public/images/berbicara.jpeg";

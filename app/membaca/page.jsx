@@ -1,6 +1,5 @@
 "use client";
 
-import logo from "@/public/images/logo.png";
 import { Input } from "@/components/ui/input";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { useEffect, useState } from "react";
