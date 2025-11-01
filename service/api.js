@@ -112,7 +112,6 @@ export class ApiService {
         method: "GET",
       }
     );
-    console.log("env:", process.env.NEXT_PUBLIC_API_BASE_URL);
     if (!response.ok) {
       console.log(await response.text());
       throw new Error("Failed to fetch data");
